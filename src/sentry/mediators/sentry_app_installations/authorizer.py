@@ -49,13 +49,23 @@ class Authorizer(Mediator):
 
     def _validate_grant(self):
         if (
-            self.grant.application.owner != self.user or
-            self.grant.application.client_id != self.client_id
+            not self.grant_belongs_to_install() or
+            not self.application_owned_by_user() or
+            not self.client_id_matches()
         ):
             raise APIUnauthorized
 
         if self.grant.is_expired():
             raise APIUnauthorized
+
+    def grant_belongs_to_install(self):
+        return self.grant.sentry_app_installation == self.install
+
+    def application_owned_by_user(self):
+        return self.grant.application.owner == self.user
+
+    def client_id_matches(self):
+        return self.grant.application.client_id == self.client_id
 
     @memoize
     def sentry_app(self):

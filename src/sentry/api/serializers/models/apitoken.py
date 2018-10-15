@@ -31,4 +31,5 @@ class ApiTokenSerializer(Serializer):
         }
         if not attrs['application']:
             data['token'] = obj.token
+            data['refreshToken'] = obj.refresh_token
         return data
