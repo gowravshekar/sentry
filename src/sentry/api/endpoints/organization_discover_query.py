@@ -172,7 +172,7 @@ class DiscoverQuerySerializer(serializers.Serializer):
 class OrganizationDiscoverQueryEndpoint(OrganizationEndpoint):
     permission_classes = (OrganizationDiscoverQueryPermission, )
 
-    def do_query(self, projects, start, end, request, **kwargs):
+    def do_query(self, projects, request, **kwargs):
         requested_query = deepcopy(kwargs)
 
         selected_columns = kwargs['selected_columns']
@@ -194,8 +194,6 @@ class OrganizationDiscoverQueryEndpoint(OrganizationEndpoint):
 
         data_fn = partial(
             snuba.raw_query,
-            start=start,
-            end=end,
             referrer='discover',
             **kwargs
         )

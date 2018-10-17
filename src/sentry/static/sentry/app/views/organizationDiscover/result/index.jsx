@@ -35,7 +35,7 @@ export default class Result extends React.Component {
     data: PropTypes.object.isRequired,
     queryBuilder: PropTypes.object.isRequired,
     savedQuery: SentryTypes.DiscoverSavedQuery, // Provided if it's a saved search
-    onFetchPage: PropTypes.func,
+    onFetchPage: PropTypes.func.isRequired,
   };
 
   constructor() {

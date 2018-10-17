@@ -344,6 +344,9 @@ class GenericOffsetPaginator(object):
 
     It is potentially less performant than a ranged query solution that might
     not to have to look at as many rows.
+
+    Can either take data as a list or dictionary with data as value in order to
+    return full object if necessary. (if isinstance statement)
     """
 
     def __init__(self, data_fn):
@@ -359,7 +362,7 @@ class GenericOffsetPaginator(object):
             has_more = len(data) == limit + 1
             if has_more:
                 data.pop()
-        else:
+        elif isinstance(data.get('data'), list):
             has_more = len(data['data']) == limit + 1
             if has_more:
                 data['data'].pop()
