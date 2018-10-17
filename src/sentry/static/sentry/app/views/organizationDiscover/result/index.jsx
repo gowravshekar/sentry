@@ -2,7 +2,6 @@ import React from 'react';
 import {browserHistory} from 'react-router';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import styled from 'react-emotion';
 import {Box, Flex} from 'grid-emotion';
 
 import SentryTypes from 'app/sentryTypes';
@@ -11,7 +10,6 @@ import Link from 'app/components/link';
 import BarChart from 'app/components/charts/barChart';
 import LineChart from 'app/components/charts/lineChart';
 import space from 'app/styles/space';
-import Button from 'app/components/button';
 
 import {addSuccessMessage, addErrorMessage} from 'app/actionCreators/indicator';
 

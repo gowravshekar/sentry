@@ -188,9 +188,9 @@ export default function createQueryBuilder(initial = {}, organization) {
 
     return api
       .requestPromise(endpoint, {includeAllArgs: true, method: 'POST', data})
-      .then(([data, successMessage, utils]) => {
-        data.pageLinks = utils.getResponseHeader('Link');
-        return data;
+      .then(([reponseData, successMessage, utils]) => {
+        reponseData.pageLinks = utils.getResponseHeader('Link');
+        return reponseData;
       })
       .catch(() => {
         throw new Error(t('An error occurred'));

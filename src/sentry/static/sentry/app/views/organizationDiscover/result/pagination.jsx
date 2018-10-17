@@ -1,11 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import {Flex} from 'grid-emotion';
 
-import {t, tct} from 'app/locale';
 import Button from 'app/components/button';
 
 export default class Result extends React.Component {
+  static propTypes = {
+    onFetchPage: PropTypes.func.isRequired,
+    previous: PropTypes.object,
+    next: PropTypes.object,
+  };
 
   getNextPage() {
     this.props.onFetchPage('next');
@@ -35,7 +40,7 @@ export default class Result extends React.Component {
           onClick={() => this.getNextPage()}
         />
       </PaginationButtons>
-    )
+    );
   }
 }
 
