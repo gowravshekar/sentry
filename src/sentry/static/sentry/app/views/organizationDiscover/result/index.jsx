@@ -1,24 +1,20 @@
 import React from 'react';
-import {browserHistory} from 'react-router';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {Box, Flex} from 'grid-emotion';
 
 import SentryTypes from 'app/sentryTypes';
-import {t, tct} from 'app/locale';
+import {t} from 'app/locale';
 import Link from 'app/components/link';
 import BarChart from 'app/components/charts/barChart';
 import LineChart from 'app/components/charts/lineChart';
 import space from 'app/styles/space';
+import InlineSvg from 'app/components/inlineSvg';
 
-import {addSuccessMessage, addErrorMessage} from 'app/actionCreators/indicator';
-
-import {getChartData, getChartDataByDay, downloadAsCsv, generateQueryName} from './utils';
-import {createSavedQuery} from '../utils';
+import {getChartData, getChartDataByDay, downloadAsCsv} from './utils';
 import Table from './table';
 import {
   Heading,
-  EditableName,
   ResultSummary,
   ChartWrapper,
   ChartNote,
@@ -28,18 +24,15 @@ import {NUMBER_OF_SERIES_BY_DAY} from '../data';
 
 export default class Result extends React.Component {
   static propTypes = {
-    organization: SentryTypes.Organization.isRequired,
     data: PropTypes.object.isRequired,
-    queryBuilder: PropTypes.object.isRequired,
     savedQuery: SentryTypes.DiscoverSavedQuery, // Provided if it's a saved search
+    onToggleEdit: PropTypes.func,
   };
 
   constructor() {
     super();
     this.state = {
       view: 'table',
-      isEditMode: false,
-      savedQueryName: null,
     };
   }
 
@@ -62,47 +55,9 @@ export default class Result extends React.Component {
     }
 
     this.setState({
-      isEditMode: false,
       savedQueryName: null,
     });
   }
-
-  toggleEditMode = () => {
-    const {savedQuery} = this.props;
-    this.setState(state => {
-      const isEditMode = !state.isEditMode;
-      return {
-        isEditMode,
-        savedQueryName: isEditMode
-          ? savedQuery ? savedQuery.name : generateQueryName()
-          : null,
-      };
-    });
-  };
-
-  confirmSave = () => {
-    const {organization, queryBuilder} = this.props;
-    const {savedQueryName} = this.state;
-    const data = {...queryBuilder.getInternal(), name: savedQueryName};
-
-    createSavedQuery(organization, data)
-      .then(savedQuery => {
-        addSuccessMessage(
-          tct('Successfully saved query [name]', {name: savedQuery.name})
-        );
-        browserHistory.push({
-          pathname: `/organizations/${organization.slug}/discover/saved/${savedQuery.id}/`,
-        });
-      })
-      .catch(err => {
-        const message = (err && err.detail) || t('Could not save query');
-        addErrorMessage(message);
-      });
-  };
-
-  updateSavedQueryName = val => {
-    this.setState({savedQueryName: val});
-  };
 
   renderToggle() {
     const {baseQuery, byDayQuery} = this.props.data;
@@ -171,37 +126,20 @@ export default class Result extends React.Component {
 
   renderSavedQueryHeader() {
     return (
-      <Flex>
+      <Flex align="center">
         <Heading>{this.props.savedQuery.name}</Heading>
+        <SavedQueryAction onClick={this.props.onToggleEdit}>
+          <InlineSvg src="icon-edit" />
+        </SavedQueryAction>
       </Flex>
     );
   }
 
   renderQueryResultHeader() {
-    const {isEditMode, savedQueryName} = this.state;
-
     return (
-      <React.Fragment>
-        {!isEditMode && (
-          <Flex>
-            <Heading>{t('Result')}</Heading>
-            <SavedQueryAction data-test-id="save" onClick={this.toggleEditMode}>
-              {t('Save')}
-            </SavedQueryAction>
-          </Flex>
-        )}
-        {isEditMode && (
-          <Flex>
-            <EditableName value={savedQueryName} onChange={this.updateSavedQueryName} />
-            <SavedQueryAction data-test-id="confirm" onClick={this.confirmSave}>
-              {t('Confirm save')}
-            </SavedQueryAction>
-            <SavedQueryAction data-test-id="cancel" onClick={this.toggleEditMode}>
-              {t('Cancel')}
-            </SavedQueryAction>
-          </Flex>
-        )}
-      </React.Fragment>
+      <Flex>
+        <Heading>{t('Result')}</Heading>
+      </Flex>
     );
   }
 
