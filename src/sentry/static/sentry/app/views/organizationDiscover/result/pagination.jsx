@@ -5,23 +5,18 @@ import {Flex} from 'grid-emotion';
 
 import Button from 'app/components/button';
 
-export default class Result extends React.Component {
+export default class Pagination extends React.Component {
   static propTypes = {
-    onFetchPage: PropTypes.func.isRequired,
+    getNextPage: PropTypes.func.isRequired,
+    getPreviousPage: PropTypes.func.isRequired,
+    // onFetchPage: PropTypes.func.isRequired,
     previous: PropTypes.object,
     next: PropTypes.object,
   };
 
-  getNextPage() {
-    this.props.onFetchPage('next');
-  }
-
-  getPreviousPage() {
-    this.props.onFetchPage('previous');
-  }
 
   render() {
-    const {previous, next} = this.props;
+    const {getPreviousPage, getNextPage, previous, next} = this.props;
 
     return (
       <PaginationButtons className="btn-group">
@@ -30,14 +25,14 @@ export default class Result extends React.Component {
           disabled={previous && !previous.results}
           size="xsmall"
           icon="icon-chevron-left"
-          onClick={() => this.getPreviousPage()}
+          onClick={() => getPreviousPage()}
         />
         <Button
           className="btn"
           disabled={next && !next.results}
           size="xsmall"
           icon="icon-chevron-right"
-          onClick={() => this.getNextPage()}
+          onClick={() => getNextPage()}
         />
       </PaginationButtons>
     );

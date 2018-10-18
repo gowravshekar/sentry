@@ -213,6 +213,7 @@ export default class Result extends React.Component {
     const {
       data: {baseQuery, byDayQuery},
       savedQuery,
+      onFetchPage,
     } = this.props;
 
     const {view} = this.state;
@@ -292,7 +293,8 @@ export default class Result extends React.Component {
           <Pagination
             previous={baseQuery.previous}
             next={baseQuery.next}
-            onFetchPage={this.props.onFetchPage}
+            getNextPage={() => onFetchPage('next')}
+            getPreviousPage={() => onFetchPage('previous')}
           />
         )}
         {this.renderSummary()}
