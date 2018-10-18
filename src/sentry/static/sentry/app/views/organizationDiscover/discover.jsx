@@ -169,6 +169,20 @@ export default class OrganizationDiscover extends React.Component {
       });
   };
 
+  onFetchPage(nextOrPrev) {
+    this.setState({isFetchingQuery: true});
+    return this.state.resultManager
+      .fetchPage(nextOrPrev)
+      .then(data => {
+        this.setState({data, isFetchingQuery: false});
+      })
+      .catch(err => {
+        const message = (err && err.message) || t('An error occurred');
+        addErrorMessage(message);
+        this.setState({isFetchingQuery: false});
+      });
+  }
+
   toggleSidebar = view => {
     if (view !== this.state.view) {
       this.setState({view});
@@ -308,18 +322,6 @@ export default class OrganizationDiscover extends React.Component {
         )}
       </React.Fragment>
     );
-  }
-
-  onFetchPage(nextOrPrev) {
-    return this.state.resultManager
-      .fetchPage(nextOrPrev)
-      .then(data => {
-        this.setState({data});
-      })
-      .catch(err => {
-        const message = (err && err.message) || t('An error occurred');
-        addErrorMessage(message);
-      });
   }
 
   render() {

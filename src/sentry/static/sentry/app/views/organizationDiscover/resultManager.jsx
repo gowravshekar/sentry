@@ -20,6 +20,11 @@ export default function createResultManager(queryBuilder) {
     fetchPage,
   };
 
+  /**
+   * Returns data of next or previous page
+   * @param String "next" or "previous"
+   * @returns {Promise<Object>}
+   */
   function fetchPage(pageToFetch) {
     const query = queryBuilder.getExternal();
     const baseQuery = queryBuilder.getQueryByType(query, 'baseQuery');

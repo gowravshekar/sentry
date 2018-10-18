@@ -188,7 +188,7 @@ export default function createQueryBuilder(initial = {}, organization) {
 
     return api
       .requestPromise(endpoint, {includeAllArgs: true, method: 'POST', data})
-      .then(([reponseData, successMessage, utils]) => {
+      .then(([reponseData, _, utils]) => {
         reponseData.pageLinks = utils.getResponseHeader('Link');
         return reponseData;
       })

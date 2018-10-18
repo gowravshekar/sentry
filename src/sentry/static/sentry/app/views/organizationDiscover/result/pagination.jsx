@@ -9,7 +9,6 @@ export default class Pagination extends React.Component {
   static propTypes = {
     getNextPage: PropTypes.func.isRequired,
     getPreviousPage: PropTypes.func.isRequired,
-    // onFetchPage: PropTypes.func.isRequired,
     previous: PropTypes.object,
     next: PropTypes.object,
   };
@@ -25,14 +24,14 @@ export default class Pagination extends React.Component {
           disabled={previous && !previous.results}
           size="xsmall"
           icon="icon-chevron-left"
-          onClick={() => getPreviousPage()}
+          onClick={getPreviousPage}
         />
         <Button
           className="btn"
           disabled={next && !next.results}
           size="xsmall"
           icon="icon-chevron-right"
-          onClick={() => getNextPage()}
+          onClick={getNextPage}
         />
       </PaginationButtons>
     );

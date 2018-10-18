@@ -229,7 +229,6 @@ class OrganizationDiscoverQueryEndpoint(OrganizationEndpoint):
             snuba_results['meta'] = [{'name': field['name']} for field in snuba_results['meta']]
             return snuba_results
 
-        # return snuba_results
         return self.paginate(
             request=request,
             on_results=handle_results,
