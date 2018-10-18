@@ -7,10 +7,7 @@
 import parseLinkHeader from 'app/utils/parseLinkHeader';
 
 export default function createResultManager(queryBuilder) {
-  const data = {
-    baseQuery: {query: null, data: null, next: null, previous: null},
-    byDayQuery: {query: null, data: null},
-  };
+  let data = getDefault();
 
   return {
     getAll,
@@ -104,9 +101,19 @@ export default function createResultManager(queryBuilder) {
    * @returns {Void}
    */
   function reset() {
-    for (let key in data) {
-      data[key] = {query: null, data: null, next: null, previous: null};
-    }
+    data = getDefault();
+  }
+
+  /**
+   * Resets all data
+   *
+   * @returns {{baseQuery: {query: null, data: null, next: null, previous: null}, byDayQuery: {query: null, data: null}}}
+   */
+  function getDefault() {
+    return {
+      baseQuery: {query: null, data: null, next: null, previous: null},
+      byDayQuery: {query: null, data: null},
+    };
   }
 
   /**
