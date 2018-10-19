@@ -19,7 +19,7 @@ export default function createResultManager(queryBuilder) {
 
   /**
    * Returns data of next or previous page
-   * @param String "next" or "previous"
+   * @param {String} pageToFetch
    * @returns {Promise<Object>}
    */
   function fetchPage(pageToFetch) {
@@ -45,7 +45,7 @@ export default function createResultManager(queryBuilder) {
         return data;
       });
     }
-    return Promise.resolve(data);
+    return Promise.reject(new Error('No New Page Available'));
   }
 
   /**
@@ -107,7 +107,7 @@ export default function createResultManager(queryBuilder) {
   /**
    * Resets all data
    *
-   * @returns {{baseQuery: {query: null, data: null, next: null, previous: null}, byDayQuery: {query: null, data: null}}}
+   * @returns {Object}
    */
   function getDefault() {
     return {

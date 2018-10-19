@@ -366,6 +366,9 @@ class GenericOffsetPaginator(object):
             has_more = len(data['data']) == limit + 1
             if has_more:
                 data['data'].pop()
+        else:
+            data = []
+            has_more = False
 
         # Since we are not issuing ranged queries, our cursors always have
         # `value=0` (ie. all rows have the same value), and so offset naturally
