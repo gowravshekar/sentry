@@ -192,11 +192,6 @@ class OrganizationDiscoverQueryEndpoint(OrganizationEndpoint):
             if aggregation[1] == 'project_name':
                 aggregation[1] = 'project_id'
 
-        data_fn = partial(
-            snuba.raw_query,
-            referrer='discover',
-            **kwargs
-        )
 
         def handle_results(snuba_results):
             if 'project_name' in requested_query['selected_columns']:
@@ -229,11 +224,23 @@ class OrganizationDiscoverQueryEndpoint(OrganizationEndpoint):
             snuba_results['meta'] = [{'name': field['name']} for field in snuba_results['meta']]
             return snuba_results
 
-        return self.paginate(
-            request=request,
-            on_results=handle_results,
-            paginator=GenericOffsetPaginator(data_fn=data_fn)
-        )
+        if not kwargs['aggregations']:
+            data_fn = partial(
+                snuba.raw_query,
+                referrer='discover',
+                **kwargs
+            )
+            return self.paginate(
+                request=request,
+                on_results=handle_results,
+                paginator=GenericOffsetPaginator(data_fn=data_fn)
+            )
+        else:
+            snuba_results = snuba.raw_query(
+                referrer='discover',
+                **kwargs
+            )
+            return Response(handle_results(snuba_results), status=200)
 
     def post(self, request, organization):
 
