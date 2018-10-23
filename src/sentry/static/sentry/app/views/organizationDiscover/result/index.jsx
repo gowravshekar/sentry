@@ -244,12 +244,14 @@ export default class Result extends React.Component {
         {view === 'table' && (
           <div>
             <Table data={baseQuery.data} query={baseQuery.query} />
-            <Pagination
-              previous={baseQuery.previous}
-              next={baseQuery.next}
-              getNextPage={() => onFetchPage('next')}
-              getPreviousPage={() => onFetchPage('previous')}
-            />
+            {!baseQuery.query.aggregations && (
+              <Pagination
+                previous={baseQuery.previous}
+                next={baseQuery.next}
+                getNextPage={() => onFetchPage('next')}
+                getPreviousPage={() => onFetchPage('previous')}
+              />
+            )}
           </div>
         )}
         {view === 'line' && (
